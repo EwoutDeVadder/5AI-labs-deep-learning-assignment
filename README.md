@@ -86,7 +86,7 @@ Next, you will need to install the following packages in the newly created virtu
 Use the following command to install these dependencies:
 
 ```
-$ pip install torch torchvision matplotlib numpy
+pip install torch torchvision matplotlib numpy
 ```
 
 **Make sure the virtual environment is activated before installing these packages!**
@@ -101,19 +101,19 @@ Finally, you will need to install the IPython kernel and configure your IDE to w
 Make sure the virtual environment is activated. Then install the `ipykernel` package with:
 
 ```
-$ pip install ipykernel
+pip install ipykernel
 ```
 
 PyCharm Community Edition does not support Jupyter Notebooks. However, you can run them locally in the browser using the `jupyter` package. Install this package with:
 
 ```
-$ pip install jupyter
+pip install jupyter
 ```
 
 Next, run Jupyter in your browser by running the following command in the terminal. This will open a browser-based application where you can open, edit, and run the Jupyter Notebook files (.ipynb).
 
 ```
-$ jupyter notebook
+jupyter notebook
 ```
 
 Visual Studio Code has native support for working with Jupyter Notebooks. Follow the instructions in [Manage Jupyter Kernels in VS Code](https://code.visualstudio.com/docs/datascience/jupyter-kernel-management) to select the kernel from the virtual environment. Editing and running notebooks is explained in [Jupyter Notebooks in VS Code](https://code.visualstudio.com/docs/datascience/jupyter-notebooks).
