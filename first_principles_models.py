@@ -15,17 +15,21 @@ class LinearModel():
     def init_weights(self, input_shape: Size, output_shape: Size) -> Tensor:
         """Create the model's weight tensor."""
         # TODO: Initialize one small random weight for every input-output connection.
-        raise NotImplementedError()
+    
+        return torch.rand(*input_shape, *output_shape, dtype=torch.float32)
 
     def calculate_output(self, input: Tensor) -> Tensor:
         """Apply the model to an input tensor."""
         # TODO: Calculate the unrestricted linear output without flattening the input.
-        raise NotImplementedError()
+        # output = W matrix-multiplication input
+
+        return input @ self.weights
 
     def calculate_loss(self, output: Tensor, target: Tensor) -> Tensor:
         """Measure the discrepancy between a model output and its target."""
         # TODO: Calculate the mean squared error.
-        raise NotImplementedError()
+
+        return ((output - target) ** 2).mean()
 
     def calculate_gradients(self, input: Tensor, output: Tensor, target: Tensor) -> Tensor:
         """Calculate the gradient of the loss with respect to every model weight."""
