@@ -45,11 +45,18 @@ class RegressionLearner(Learner):
                 targets = targets.to(device)
 
                 # TODO: Implement the batch update step.
+                #we moeten gwn dezelfde stappen als oef 1 uitvoeren, mr dan door pytorch
 
-                loss = torch.tensor([0])
+                self.optimizer.zero_grad()  # Zero the gradients
+                outputs = self.model(data)
+                loss = self.criterion(outputs, targets)  # Compute the loss
+                
+                loss.backward()  # Backpropagate the gradients, WAAROM BLIJVEN DIE FORWARD EN BACKWARDS HELE TIJD TERUG KOMEN IK SNAP DAAR TOCH GEEN KUT VAN         
+                self.optimizer.step()  # Update the model parameters
 
+                #loss = torch.tensor([0]) idk
                 train_loss += loss.item() * len(data)
-
+            
             train_loss = train_loss / len(dataloader.dataset)
 
             train_losses.append(train_loss)
@@ -69,14 +76,15 @@ class RegressionLearner(Learner):
     def test(self, dataset: Dataset, device: torch.device):
 
         self.model.to(device)
-
         self.model.eval()  # set model in evaluation mode
 
-        test_loss = 0
+        data, targets = dataset[:]
+        data, targets = data.to(device), targets.to(device)
 
-        # TODO: Compute the model's RMSE on the test dataset.
+        outputs = self.model(data)
+        mse = torch.mean((outputs - targets) ** 2)
 
-        return test_loss
+        return math.sqrt(mse.item())  # RMSE
 
     @torch.no_grad()
     def predict(self, dataset, device):

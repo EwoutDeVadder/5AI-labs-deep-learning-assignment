@@ -1,6 +1,7 @@
 import torch
 
 from torch import Tensor, Size
+import math
 
 
 class LinearModel():
@@ -97,10 +98,22 @@ class LinearSigmoidModel(LinearModel):
     def calculate_output(self, input: Tensor) -> Tensor:
         """Apply the model to an input tensor."""
         # TODO: Calculate the linear logits and apply the sigmoid activation.
-        raise NotImplementedError()
+
+        input_expanded = input.unsqueeze(-1)  # (4,4,3(+,1)) -> add a new dimension for broadcasting, -1 last element
+        calculated = self.weights * input_expanded  # (4,4,3,2) element-wise multiplication
+
+        input_dimensions = tuple(range(input.dim()))  # (0, 1, 2) for summing over the input dimensions
+        calc = calculated.sum(dim=input_dimensions)  # (2,1) sum over the input 
+
+        return 1/(1+math.e**(-calc))
 
     def calculate_gradients(self, input: Tensor, output: Tensor, target: Tensor) -> Tensor:
         """Calculate the gradient of the loss with respect to every model weight."""
         # TODO: Use the MSE, sigmoid, and linear-layer derivatives to calculate d(loss)/d(weights) manually.
-        raise NotImplementedError()
+        n = output.numel()  # number of elements in the output tensor
+        
+        d_loss__d_output = 2 * (output - target) / n 
+        d_output__d_weights = input.unsqueeze(-1) * output * (1 - output) 
+        gradients = d_loss__d_output * d_output__d_weights
 
+        return gradients
