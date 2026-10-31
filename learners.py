@@ -51,10 +51,9 @@ class RegressionLearner(Learner):
                 outputs = self.model(data)
                 loss = self.criterion(outputs, targets)  # Compute the loss
                 
-                loss.backward()  # Backpropagate the gradients, WAAROM BLIJVEN DIE FORWARD EN BACKWARDS HELE TIJD TERUG KOMEN IK SNAP DAAR TOCH GEEN KUT VAN         
+                loss.backward()  # Backpropagate the gradients
                 self.optimizer.step()  # Update the model parameters
 
-                #loss = torch.tensor([0]) idk
                 train_loss += loss.item() * len(data)
             
             train_loss = train_loss / len(dataloader.dataset)
@@ -78,6 +77,7 @@ class RegressionLearner(Learner):
         self.model.to(device)
         self.model.eval()  # set model in evaluation mode
 
+        #TODO: done
         data, targets = dataset[:]
         data, targets = data.to(device), targets.to(device)
 

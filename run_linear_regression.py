@@ -59,7 +59,7 @@ train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size)
 
 # create an instance of the linear regression model
 
-model = LinearRegressionModel(1, 1) # one input, one output
+model = LinearRegressionModel(1, 1) # one input (size), one output (price)
 
 # create an instance of an appropriate criterion (loss function) (see https://pytorch.org/docs/stable/nn.html#loss-functions)
 
@@ -67,7 +67,7 @@ criterion = torch.nn.L1Loss()
 
 # create an instance of an appropriate opimizer to train the model parameters (see https://pytorch.org/docs/stable/optim.html)
 
-optimizer = torch.optim.SGD(model.named_parameters(), lr=learning_rate, momentum=0.9) # lr=learning_rate
+optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate) # lr=learning_rate, can add momentum not needed
 
 """END TODO"""
 
