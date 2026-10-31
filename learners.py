@@ -98,6 +98,18 @@ class RegressionLearner(Learner):
 
 class ClassificationLearner(Learner):
 
+    #Exercise 8: Train and evaluate the classification model
+    # Complete the ClassificationLearner class in learners.py.
+
+    # You will need to complete the train method with the update step for each batch using the configured model, criterion, and optimizer.
+
+    # Furthermore, you will need to complete the _evaluate method. This method should evaluate every batch without tracking gradients and return the mean loss and accuracy over the complete dataset.
+    # Select the predicted class for each image from the model output.
+
+    # The learner uses _evaluate to measure performance on the validation subset after each training epoch and saves the model with the lowest validation loss. The test method reuses the same evaluation procedure for the test set.
+
+    # Note: Make sure that both loss and accuracy are aggregated over the number of samples rather than the number of batches.
+
     def __init__(self, model: Module, criterion: Module, optimizer: Optimizer):
         super().__init__(model, criterion, optimizer)
 
@@ -121,7 +133,14 @@ class ClassificationLearner(Learner):
                 
                 # TODO: Implement the batch update step.
 
-                loss = torch.tensor([0])
+                self.optimizer.zero_grad()                  # Zero the gradients
+                outputs = self.model(data)                  # Forward pass through the model (64,10) output
+                loss = self.criterion(outputs, targets)     # Compute the loss
+                loss.backward()                             # Backpropagate the gradients
+                self.optimizer.step()                       # Update the model parameters
+
+                # loss = torch.tensor([0]) IMAGINE ANOTHER LINE OF CODE HERE, BUT IT'S NOT USEFUL!!!
+                # id like to make myself believe that planet earth turns slowely, it's hard to say but i'd rather stay awake when im asleep
 
                 train_loss += loss.item() * len(data)
 
@@ -164,5 +183,22 @@ class ClassificationLearner(Learner):
         eval_accuracy = 0
 
         # TODO: Compute the model's loss and accuracy over the dataset.
+        #welcome to the tab-tab
+        for data, targets in dataloader:
+            data = data.to(device)
+            targets = targets.to(device)
+
+            outputs = self.model(data)  # Forward pass through the model
+            loss = self.criterion(outputs, targets)  # Compute the loss
+
+            eval_loss += loss.item() * len(data)  # Accumulate the loss
+
+            # Compute accuracy
+            predicted = torch.argmax(outputs, dim=1)  # Get the predicted class
+            eval_accuracy += (predicted == targets).sum().item()  # Count correct predictions
+
+        # avr loss and accuracy
+        eval_loss = eval_loss / len(dataloader.dataset)
+        eval_accuracy = eval_accuracy / len(dataloader.dataset)
 
         return (eval_loss, eval_accuracy)
